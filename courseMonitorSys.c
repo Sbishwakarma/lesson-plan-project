@@ -164,6 +164,45 @@ void listCourses()
 	fclose(fp);
 }
 
+void listCoursesByTeacher(char username[50])
+{
+	struct course crs;
+	FILE *fp = fopen("Courses.dat", "r");
+
+	if (fp == NULL)
+	{
+		printf("\nError: Could not open file!\n");
+		return;
+	}
+
+	int courseFound = 0;
+	printf("\nCourses Assigned to %s:\n", username);
+	while (fread(&crs, sizeof(struct course), 1, fp))
+	{
+		if (strcmp(crs.teacher, username) == 0)
+		{
+			printf("\nID: %s\nName: %s\nLessons:\n", crs.id, crs.name);
+			char lessons[500];
+			strcpy(lessons, crs.lessons);
+			char *lesson = strtok(lessons, ",");
+			for (int i = 0; i < crs.lessonCount && lesson; i++)
+			{
+				printf("  - %s: %.2f%%\n", lesson, crs.lessonCoverages[i]);
+				lesson = strtok(NULL, ",");
+			}
+			printf("Total Coverage: %.2f%%\n", crs.totalCoverage);
+			courseFound = 1;
+		}
+	}
+
+	if (!courseFound)
+	{
+		printf("\nNo courses assigned to %s.\n", username);
+	}
+
+	fclose(fp);
+}
+
 void deleteCourse()
 {
 	char courseId[20];
@@ -483,7 +522,7 @@ int main()
 							switch (userOpt)
 							{
 							case 1:
-								listCourses(); // You may want to filter courses based on the teacher's username.
+								listCoursesByTeacher(usr.username); // You may want to filter courses based on the teacher's username.
 								break;
 							case 2:
 								updateCoverage(usr.username);
