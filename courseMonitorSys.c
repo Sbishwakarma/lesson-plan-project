@@ -407,7 +407,7 @@ int main()
 	char password2[50];
 	struct user user;
 
-	printf("\n\t\t\t\t--------------------welcome to lesson monitor system--------------------");
+	printf("\n\t\t\t\t--------------------welcome to lesson plan tracker--------------------");
 	printf("\nPlease choose your option");
 	printf("\n1.Signup");
 	printf("\n2.Login");
